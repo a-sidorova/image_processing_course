@@ -1,7 +1,7 @@
 # Course Image Processing. Autumn. 2020
 This repository stores Computer Graphics laboratory works of spring 2020.
 
-**Tools**: C++, OpenCV
+**Tools**: Python, OpenCV
 
 ## Themes of labs:
 1. Spot filters
