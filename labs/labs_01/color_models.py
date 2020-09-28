@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 
 
@@ -76,6 +75,7 @@ def brightness_BGR(img, coeff):
             result[coord_y, coord_x, 1] = max(min(img[coord_y, coord_x, 1] + coeff, 255), 0)
             result[coord_y, coord_x, 0] = max(min(img[coord_y, coord_x, 0] + coeff, 255), 0)
     return result
+
 
 def brightness_HSV(img, coeff):
     height, width, _ = img.shape
