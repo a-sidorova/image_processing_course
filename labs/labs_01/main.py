@@ -1,9 +1,23 @@
 import cv2
+
 import sys
 from time import perf_counter
 from utils import *
 from color_models import *
+from ShadesOfGray import *
 
+def test_shades_of_gray(img):
+    t1_start = perf_counter()
+    monoImg = monochromeImg(img)
+    t1_finish = perf_counter()
+    cv2.imshow('Monochrome Image', monoImg)
+    print('Time = ' + str(t1_finish - t1_start))
+
+    t2_start = perf_counter()
+    monoImgCV = monochromeImgOpenCV(img)
+    t2_finish = perf_counter()
+    cv2.imshow('OpenCV Monochrome Image', monoImgCV)
+    print('Time_opencv = ' + str(t2_finish - t2_start))
 
 def test_color_models(img):
     # Converting BGR to HSV
@@ -67,7 +81,8 @@ def main():
 
 
     print('II. Gray scale\n')
-
+    test_shades_of_gray(img)
+    cv2.waitKey()
 
     print('III. Color models\n')
     test_color_models(img)
