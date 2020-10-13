@@ -3,7 +3,7 @@ import numpy as np
 
 def monochromeImg(imgMono):
     h, w, _ = imgMono.shape
-    resImg = np.zeros(shape=(h, w, 1), dtype='uint8')
+    resImg = np.zeros(shape=(h, w), dtype='uint8')
 
     for x in range(w):
         for y in range(h):

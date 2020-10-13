@@ -19,6 +19,10 @@ def test_shades_of_gray(img):
     cv2.imshow('OpenCV Monochrome Image', monoImgCV)
     print('Time_opencv = ' + str(t2_finish - t2_start))
 
+    mse_value = mse(monoImg, monoImgCV)
+    print('MSE: ' + str(mse_value) + '\n')
+
+
 def test_color_models(img):
     # Converting BGR to HSV
     print('[Loading...] Converting BGR to HSV')
@@ -77,17 +81,14 @@ def main():
     img = cv2.imread(path_to_img)
     cv2.imshow('Src image', img)
 
-    print('I. Image similarity metric\n')
-
-
-    print('II. Gray scale\n')
+    print('I. Gray scale\n')
     test_shades_of_gray(img)
     cv2.waitKey()
 
-    print('III. Color models\n')
+    print('II. Color models\n')
     test_color_models(img)
-
     cv2.waitKey()
+
     cv2.destroyAllWindows()
 
 
