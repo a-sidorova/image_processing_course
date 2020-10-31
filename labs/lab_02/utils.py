@@ -15,3 +15,10 @@ def mse(img, img_opencv):
     summ = np.sum(diff)
     mse_value = summ / (num_of_channels * float(height * width))
     return mse_value
+
+
+def reshape_img(img):
+    w = 512
+    h = 512
+    img = cv2.resize(img, (w, h))
+    return img
