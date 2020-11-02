@@ -6,6 +6,15 @@ from median_filter import median_filter
 from gauss_filter import gauss_filter
 
 
+def test_noise(img):
+    print('\t[Loading...] Calculating..')
+    start = perf_counter()
+    result = noise(img, -9, 20)
+    finish = perf_counter()
+    cv2.imshow('Add noise', result)
+    print('\tTime: ' + str(finish - start))
+
+
 def test_median_filter(img):
     print('\t[Loading...] Calculating..')
     start = perf_counter()
@@ -43,7 +52,10 @@ def main():
     img = reshape_img(img)
     cv2.imshow('Src image', img)
 
+
     print('I. Making noise\n')
+    test_noise(img)
+    cv2.waitKey()
 
     print('II. Deleting noise')
     print('\tII.a Median filter')
