@@ -1,8 +1,12 @@
 import cv2
 import sys
+import numpy as np
 from time import perf_counter
 from utils import mse, reshape_img
 from canny import canny
+from distance_transform import distanceTransform
+from shades_of_gray import monochrome_img
+from watershed import watershed
 
 
 def test_canny(img):
@@ -22,8 +26,25 @@ def test_canny(img):
     print('MSE: ' + str(mse_value) + '\n')
 
 
+def test_distance_transform(img):
+    bimg_array = img
+    bimg1 = monochrome_img(bimg_array)
+    _, bimg = cv2.threshold(bimg1, 100, 255, cv2.THRESH_BINARY)
+
+    cv2.imshow('lol', bimg)
+
+    start = perf_counter()
+    res = distanceTransform(bimg)
+    finish = perf_counter()
+    cv2.imshow('Distance transform', res)
+    print('Time = ' + str(finish - start))
+
+
+def test_watershed(img):
+    watershed(img)
+
 def main():
-    path_to_img = r'../../resources/apple.jpg'
+    path_to_img = r'../../resources/money.jpg'
 
     print('========== HIGHLIGHTING BORDERS ==========\n')
     print('Src image: ' + path_to_img + '\n')
@@ -32,11 +53,16 @@ def main():
     cv2.imshow('Src image', img)
 
     print('I. Canny\n')
-    test_canny(img)
-    cv2.waitKey()
+    #test_canny(img)
+    #cv2.waitKey()
+
+    print('I. Distance Transform\n')
+   # test_distance_transform(img)
+    #cv2.waitKey()
 
     cv2.destroyAllWindows()
 
+    test_watershed(img)
 
 if __name__ == '__main__':
-   sys.exit(main() or 0)
+    sys.exit(main() or 0)
