@@ -1,6 +1,5 @@
 import cv2
 import sys
-import numpy as np
 from time import perf_counter
 from utils import mse, reshape_img
 from canny import canny
@@ -41,7 +40,8 @@ def test_distance_transform(img):
 
 
 def test_watershed(img):
-    watershed(img)
+    watershed_img = watershed(img)
+    cv2.imshow("result", watershed_img)
 
 def main():
     path_to_img = r'../../resources/money.jpg'
@@ -56,13 +56,16 @@ def main():
     #test_canny(img)
     #cv2.waitKey()
 
-    print('I. Distance Transform\n')
+    print('II. Distance Transform\n')
    # test_distance_transform(img)
     #cv2.waitKey()
 
+    print('III. Watershed\n')
+    test_watershed(img)
+    cv2.waitKey()
+
     cv2.destroyAllWindows()
 
-    test_watershed(img)
 
 if __name__ == '__main__':
     sys.exit(main() or 0)
