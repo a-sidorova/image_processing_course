@@ -1,34 +1,23 @@
-import cv2 as cv
+import cv2
 import numpy as np
-from distance_transform import distanceTransform
+from distance_transform import distance_transform
+from shades_of_gray import monochrome_img
 
 
-def watershed(img):
+def watershed(img, distances):
     image = np.copy(img)
+    gray_img = monochrome_img(image)
+    _, bin_img = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY)
+    background = cv2.dilate(bin_img, cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)), iterations=3)
+    ret, markers = cv2.connectedComponents(background)
 
-    blurred = cv.pyrMeanShiftFiltering(image, 10, 100)
-    gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
-    ret, binary = cv.threshold(gray, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)
-
-    kernel = cv.getStructuringElement(cv.MORPH_RECT, (3, 3))
-    mb = cv.morphologyEx(binary, cv.MORPH_OPEN, kernel, iterations=2)
-
-    sure_bg = cv.dilate(mb, kernel, iterations=3)
-
-    dist = distanceTransform(mb)
-
-    ret, sure_fg = cv.threshold(dist, dist.max() * 0.6, 255, cv.THRESH_BINARY)
-    sure_fg = np.uint8(sure_fg)
-
-    unknown = cv.subtract(sure_bg, sure_fg)
-
-    ret, markers = cv.connectedComponents(sure_bg)
+    _, foreground = cv2.threshold(distances, distances.max() * 0.6, 255, cv2.THRESH_BINARY)
 
     markers = markers + 1
+    unknown = cv2.subtract(background, np.uint8(foreground))
     markers[unknown == 255] = 0
 
-    markers = cv.watershed(image, markers=markers)
+    markers = cv2.watershed(image, markers=markers)
 
     image[markers == -1] = (0, 0, 255)
-
     return image

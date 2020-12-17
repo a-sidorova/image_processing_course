@@ -3,7 +3,7 @@ import sys
 from time import perf_counter
 from utils import mse, reshape_img
 from canny import canny
-from distance_transform import distanceTransform
+from distance_transform import distance_transform
 from shades_of_gray import monochrome_img
 from watershed import watershed
 
@@ -16,7 +16,7 @@ def test_canny(img):
     print('Time = ' + str(finish - start))
 
     start = perf_counter()
-    res_cv = cv2.Canny(img, 0.5, 0.7)
+    res_cv = cv2.Canny(img, 50, 70)
     finish = perf_counter()
     cv2.imshow('OpenCV Canny', res_cv)
     print('Time_opencv = ' + str(finish - start))
@@ -26,22 +26,27 @@ def test_canny(img):
 
 
 def test_distance_transform(img):
-    bimg_array = img
-    bimg1 = monochrome_img(bimg_array)
-    _, bimg = cv2.threshold(bimg1, 100, 255, cv2.THRESH_BINARY)
-
-    cv2.imshow('lol', bimg)
+    gray_img = monochrome_img(img)
+    _, bin_img = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY)
 
     start = perf_counter()
-    res = distanceTransform(bimg)
+    res = distance_transform(bin_img)
     finish = perf_counter()
     cv2.imshow('Distance transform', res)
-    print('Time = ' + str(finish - start))
+    print('Time = ' + str(finish - start) + '\n')
 
 
 def test_watershed(img):
-    watershed_img = watershed(img)
-    cv2.imshow("result", watershed_img)
+    gray_img = monochrome_img(img)
+    _, bin_img = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY)
+    distances = distance_transform(bin_img)
+
+    start = perf_counter()
+    watershed_img = watershed(img, distances)
+    finish = perf_counter()
+    cv2.imshow('Watershed', watershed_img)
+    print('Time = ' + str(finish - start) + '\n')
+
 
 def main():
     path_to_img = r'../../resources/money.jpg'
@@ -53,12 +58,12 @@ def main():
     cv2.imshow('Src image', img)
 
     print('I. Canny\n')
-    #test_canny(img)
-    #cv2.waitKey()
+    test_canny(img)
+    cv2.waitKey()
 
     print('II. Distance Transform\n')
-   # test_distance_transform(img)
-    #cv2.waitKey()
+    test_distance_transform(img)
+    cv2.waitKey()
 
     print('III. Watershed\n')
     test_watershed(img)
